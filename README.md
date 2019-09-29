@@ -1,4 +1,4 @@
-# EC38821-G03
+# EC3881-G03
 Manejo y programación de sensores utilizando un micro-controlador y el DEMOQE128
 
 ## Integrantes del equipo
