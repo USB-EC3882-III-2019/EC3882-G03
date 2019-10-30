@@ -8,10 +8,10 @@ int D1[];       // Canal digital 1
 int D2[];       // Canal digital 2
 
 int ts = 1;     // Tiempo de muestreo (timescale): 1 = 50ms, 5 = 10ms, 10 = 5ms, 50 = 1ms, 100 = 500us, 500 = 100us , 1000 = 50us
-int ch1v = 10;  // Canal analogico 1 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
-int ch2v = 10;  // Canal analogico 2 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
-int d1v  = 10;  // Canal digital 1 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
-int d2v  = 10;  // Canal digital 2 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
+float ch1v = 0.5;  // Canal analogico 1 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
+float ch2v = 0.5;  // Canal analogico 2 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
+float d1v  = 1;  // Canal digital 1 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
+float d2v  = 1;  // Canal digital 2 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
 
 int i = 0;          //Variable para pintar 
 int j = 0;          // variable de control indicativa de los arreglos con data para mostrar 
@@ -207,8 +207,9 @@ void draw(){
   //Dibujado de las graficas de cada canal
   if(j==1){
     
-    image(screen,50,0);
+    image(screen,50,0); // limpia la pantalla
     
+    // Graficas 
     if(CH1ON == true) 
     ch1();
     if(CH2ON == true) 
@@ -489,23 +490,23 @@ void mouseClicked(){
   
   // escalas
   if(CH1divSobre){
-    if(ch1v ==2){
-      ch1v=20;
+    if(ch1v == 0.5){
+      ch1v=5;
       ch1led1v = color(#5AFF03);
       ch1led2v = ch1led5v = ch1led10v = color(0);
       
-  } else if(ch1v ==20){
-      ch1v=10;
+  } else if(ch1v ==5){
+      ch1v=2;
       ch1led2v = color(#5AFF03);
       ch1led1v = ch1led5v = ch1led10v = color(0);
       
-  } else if(ch1v ==10){
-      ch1v=5;
+  } else if(ch1v ==2){
+      ch1v=1;
       ch1led5v = color(#5AFF03);
       ch1led1v = ch1led2v = ch1led10v = color(0);
       
-  } else if(ch1v ==5){
-      ch1v=2;
+  } else if(ch1v ==1){
+      ch1v=0.5;
       ch1led10v = color(#5AFF03);
       ch1led1v = ch1led2v = ch1led5v = color(0);
       
@@ -513,23 +514,23 @@ void mouseClicked(){
   
 }
 if(CH2divSobre){
-    if(ch2v ==2){
-      ch2v=20;
+    if(ch2v == 0.5){
+      ch2v=5;
       ch2led1v = color(#5AFF03);
       ch2led2v = ch2led5v = ch2led10v = color(0);
       
-  } else if(ch2v ==20){
-      ch2v=10;
+  } else if(ch2v ==5 ){
+      ch2v=2;
       ch2led2v = color(#5AFF03);
       ch2led1v = ch2led5v = ch2led10v = color(0);
       
-  } else if(ch2v ==10){
-      ch2v=5;
+  } else if(ch2v ==2){
+      ch2v=1;
       ch2led5v = color(#5AFF03);
       ch2led1v = ch2led2v = ch2led10v = color(0);
       
-  } else if(ch2v ==5){
-      ch2v=2;
+  } else if(ch2v ==1){
+      ch2v=0.5;
       ch2led10v = color(#5AFF03);
       ch2led1v = ch2led2v = ch2led5v = color(0);
       
@@ -648,7 +649,7 @@ void serialEvent(Serial puerto)  {
  if ((puerto.available() > 0) && (j==0)) {
    do {
      leer[0] = byte(puerto.read());
-   }  while(int(leer[0]) < 127);
+   }  while(int(leer[0]) < 255);
  
    leer[1] = byte(puerto.read());
    leer[2] = byte(puerto.read());
@@ -659,7 +660,7 @@ void serialEvent(Serial puerto)  {
 
   if (j == 0){
     Desempaquetado();
-    print(" ( "+ int(leer[0]) + " "+ int(leer[1]) +" "+ int(leer[2]) +" "+ int(leer[3]) +" ) ");
+    //print(" ( "+ int(leer[0]) + " "+ int(leer[1]) +" "+ int(leer[2]) +" "+ int(leer[3]) +" ) ");
  } 
 }
 
@@ -669,19 +670,19 @@ void Desempaquetado(){
   int aux[]= new int[2];
   aux[0]  =  leer[1] & byte(15);
   aux[0]  = aux[0] << 8;
-  aux[1] = leer[2];
-  canal[0] = (aux[0] + aux[1])/13;
-  
+  aux[1] = leer[2] & 255;
+  canal[0] = (aux[0] + aux[1]);  // Canal analogico 1 listo
+  println("analogico = "+ canal[0]);
   aux[0]  =  leer[3] & byte(15);
   aux[0]  = aux[0] << 8;
-  aux[1] = leer[4];
-  canal[1] = (aux[0] + aux[1])/13;
+  aux[1] = leer[4] & 255;
+  canal[1] = (aux[0] + aux[1])/13;  // Canal analogico 2 listo
   
  
-  aux[0] = leer[1]  & byte(00010000);
+  aux[0] = leer[1]  & byte(16);
   canal[2] = aux[0] * 10;
   
-  aux[1] = leer[3]  & byte(00010000);
+  aux[1] = leer[3]  & byte(16);
   canal[3] = aux[1] *10;
   
   // asignacion de los canales
@@ -701,9 +702,17 @@ void Desempaquetado(){
 void ch1(){
   for (int x = 50; x < 849; x += 1) {
     
+    
     stroke(color(255,0,0));
-     if ((((x-50)*ts)+50) < 850){
-       line ((((x-50)*ts)+50), 350 - (CH1[(x-50)]*ch1v/10), (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
+   // strokeWeight(4);
+     if ((((x-50)*ts)+50) < 850 && (350 - CH1[(x+1)-50]*ch1v/2) > 51 && (350 - CH1[x-50]*ch1v/2) > 50){
+       point ((((x-50)*ts)+50), 350 - (CH1[(x-50)]*ch1v/2)); //, (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
+       // point ((((x-50)*ts)+50 + 1), 350 - (CH1[(x-50)]*ch1v/2)); //, (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
+         //point ((((x-50)*ts)+50), 350 - ((CH1[(x-50)]*ch1v/2)+1)); //, (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
+          //point ((((x-50)*ts)+50 +1), 350 - (CH1[(x-50)]*ch1v/2 +1)); //, (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
+       
+       //line ((((x-50)*ts)+50), 350 - (CH1[(x-50)]*ch1v/10), (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
+       // strokeWeight(1);
      }
   }
 }
@@ -711,8 +720,8 @@ void ch1(){
 void ch2(){
   for (int x = 50; x < 849; x += 1) {
     stroke(color(0,255,0));
-     if ((((x-50)*ts)+50) < 850)
-       line ((((x-50)*ts)+50), 350 - CH2[x-50]*ch2v/10, (((x+1-50)*ts)+50), 350 - CH2[(x+1)-50]*ch2v/10);
+     if ((((x-50)*ts)+50) < 850 && (350 - CH2[(x+1)-50]*ch2v/2) > 51 && (350 - CH2[x-50]*ch2v/2) > 50 )
+       line ((((x-50)*ts)+50), 350 - CH2[x-50]*ch2v/2, (((x+1-50)*ts)+50), 350 - CH2[(x+1)-50]*ch2v/2);
   }
 }
 
