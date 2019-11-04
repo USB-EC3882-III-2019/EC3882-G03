@@ -10,8 +10,8 @@ int D2[];       // Canal digital 2
 int ts = 1;     // Tiempo de muestreo (timescale): 1 = 50ms, 5 = 10ms, 10 = 5ms, 50 = 1ms, 100 = 500us, 500 = 100us , 1000 = 50us
 float ch1v = 0.5;  // Canal analogico 1 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
 float ch2v = 0.5;  // Canal analogico 2 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
-float d1v  = 1;  // Canal digital 1 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
-float d2v  = 1;  // Canal digital 2 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
+float d1v  = 0.5;  // Canal digital 1 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
+float d2v  = 0.5;  // Canal digital 2 : voltaje por division: 20 = 0.5V/div, 10 = 1V/div, 5 = 2v/div , 2 = 5V/div
 
 int i = 0;          //Variable para pintar 
 int j = 0;          // variable de control indicativa de los arreglos con data para mostrar 
@@ -58,7 +58,7 @@ color d2led1v, d2led2v, d2led5v, d2led10v;
 
 // leds Ts
 
-color ms50, ms10, ms5, ms1, us500, us100, us50;
+color ms50, ms10, ms5, ms1, us500;
 Serial puerto;
  
  PImage screen;
@@ -166,16 +166,16 @@ void setup() {
   text("1ms", 1020, 600);
    fill(255);
   text("500us", 1020, 630);
-   fill(255);
-  text("100us", 1020, 660);
-   fill(255);
-  text("50us", 1020, 690);
+ //  fill(255);
+  //text("100us", 1020, 660);
+  // fill(255);
+ // text("50us", 1020, 690);
   
   pantalla();
-  screen = get(50,0,800,650);
+  screen = get(50,0,801,650);
   
   //leds
- ch1led1v =  ch1led5v = ch1led10v = ch2led1v =  ch2led5v = ch2led10v = d1led1v =  d1led5v = d1led10v = d2led1v =  d2led5v = d2led10v =  ms10 = ms5 = ms1 = us500 = us100 = us50 = color(0);
+ ch1led1v =  ch1led5v = ch1led10v = ch2led1v =  ch2led5v = ch2led10v = d1led1v =  d1led5v = d1led10v = d2led1v =  d2led5v = d2led10v =  ms10 = ms5 = ms1 = us500 = color(0);
  
  ch1led2v = ch2led2v = d1led2v = d2led2v = ms50 = color(#5AFF03);
   // Rellenamos de informacion "0" para que no tengan basura
@@ -449,11 +449,7 @@ void Botones(){
   fill(us500);
   ellipse(990, 625, ledSize, ledSize);
    stroke(255);
-  fill(us100);
-  ellipse(990, 655, ledSize, ledSize);
-   stroke(255);
-  fill(us50);
-  ellipse(990, 685, ledSize, ledSize);
+
 }
 
 void mouseClicked(){
@@ -538,23 +534,23 @@ if(CH2divSobre){
   
 }
 if(CD1divSobre){
-    if(d1v ==2){
-      d1v=20;
+    if(d1v ==0.5){
+      d1v=5;
       d1led1v = color(#5AFF03);
       d1led2v = d1led5v = d1led10v = color(0);
       
-  } else if(d1v ==20){
-      d1v=10;
+  } else if(d1v ==5){
+      d1v=2;
       d1led2v = color(#5AFF03);
       d1led1v = d1led5v = d1led10v = color(0);
       
-  } else if(d1v ==10){
-      d1v=5;
+  } else if(d1v ==2){
+      d1v=1;
       d1led5v = color(#5AFF03);
       d1led1v = d1led2v = d1led10v = color(0);
       
-  } else if(d1v ==5){
-      d1v=2;
+  } else if(d1v ==1){
+      d1v=0.5;
       d1led10v = color(#5AFF03);
       d1led1v = d1led2v = d1led5v = color(0);
       
@@ -562,23 +558,23 @@ if(CD1divSobre){
   
 }
   if(CD2divSobre){
-      if(d2v ==2){
-        d2v=20;
+      if(d2v ==0.5){
+        d2v=5;
         d2led1v = color(#5AFF03);
         d2led2v = d2led5v = d2led10v = color(0);
         
-    } else if(d2v ==20){
-        d2v=10;
+    } else if(d2v ==5){
+        d2v=2;
         d2led2v = color(#5AFF03);
         d2led1v = d2led5v = d2led10v = color(0);
         
-    } else if(d2v ==10){
-        d2v=5;
+    } else if(d2v ==2){
+        d2v=1;
         d2led5v = color(#5AFF03);
         d2led2v = d2led2v = d2led10v = color(0);
         
-    } else if(d2v ==5){
-        d2v=2;
+    } else if(d2v ==1){
+        d2v=0.5;
         d2led10v = color(#5AFF03);
         d2led2v = d2led2v = d2led5v = color(0);
         
@@ -587,34 +583,26 @@ if(CD1divSobre){
   }
 
    if(TSSobre){
-     if(ts== 1000){
+     if(ts== 100){
        ts = 1;
        ms50 = color(#5AFF03);
-       ms10= ms5= ms1= us500 = us100 = us50 = color(0);
+       ms10= ms5= ms1= us500 = color(0);
      } else if(ts== 1){
        ts = 5;
        ms10 = color(#5AFF03);
-       ms50= ms5= ms1= us500 = us100 = us50 = color(0);
+       ms50= ms5= ms1= us500 = color(0);
      } else if(ts== 5){
        ts = 10;
        ms5 = color(#5AFF03);
-       ms10= ms50= ms1= us500 = us100 = us50 = color(0);
+       ms10= ms50= ms1= us500 = color(0);
      } else if(ts== 10){
        ts = 50;
        ms1 = color(#5AFF03);
-       ms10= ms50= ms5= us500 = us100 = us50 = color(0);
+       ms10= ms50= ms5= us500 = color(0);
      } else if(ts== 50){
        ts = 100;
        us500 = color(#5AFF03);
-       ms10= ms5= ms1= ms50 = us100 = us50 = color(0);
-     } else if(ts== 100){
-       ts = 500;
-       us100 = color(#5AFF03);
-       ms10= ms5= ms1= us500 = ms50 = us50 = color(0);
-     } else if(ts== 500){
-       ts = 1000;
-       us50 = color(#5AFF03);
-       ms10= ms5= ms1= us500 = us100 = ms50 = color(0);
+       ms10= ms5= ms1= ms50 = color(0);
      } 
 }
 }
@@ -671,19 +659,21 @@ void Desempaquetado(){
   aux[0]  =  leer[1] & byte(15);
   aux[0]  = aux[0] << 8;
   aux[1] = leer[2] & 255;
-  canal[0] = (aux[0] + aux[1]);  // Canal analogico 1 listo
+  canal[0] = (aux[0] + aux[1])/13;  // Canal analogico 1 listo
   println("analogico = "+ canal[0]);
   aux[0]  =  leer[3] & byte(15);
   aux[0]  = aux[0] << 8;
   aux[1] = leer[4] & 255;
-  canal[1] = (aux[0] + aux[1])/13;  // Canal analogico 2 listo
+  canal[1] = (aux[0] + aux[1])/13;  // Canal analogico 2 listo, 
   
  
   aux[0] = leer[1]  & byte(16);
-  canal[2] = aux[0] * 10;
+  canal[2] = aux[0] * 5;
   
   aux[1] = leer[3]  & byte(16);
-  canal[3] = aux[1] *10;
+  canal[3] = aux[1] *5;
+  
+  //Los canal[] se le multiplica una constate para que de la escala correcta en el osciloscopio
   
   // asignacion de los canales
   
@@ -700,19 +690,10 @@ void Desempaquetado(){
 // graficas
 
 void ch1(){
-  for (int x = 50; x < 849; x += 1) {
-    
-    
+  for (int x = 50; x < 849; x += 1) {  
     stroke(color(255,0,0));
-   // strokeWeight(4);
      if ((((x-50)*ts)+50) < 850 && (350 - CH1[(x+1)-50]*ch1v/2) > 51 && (350 - CH1[x-50]*ch1v/2) > 50){
-       point ((((x-50)*ts)+50), 350 - (CH1[(x-50)]*ch1v/2)); //, (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
-       // point ((((x-50)*ts)+50 + 1), 350 - (CH1[(x-50)]*ch1v/2)); //, (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
-         //point ((((x-50)*ts)+50), 350 - ((CH1[(x-50)]*ch1v/2)+1)); //, (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
-          //point ((((x-50)*ts)+50 +1), 350 - (CH1[(x-50)]*ch1v/2 +1)); //, (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
-       
-       //line ((((x-50)*ts)+50), 350 - (CH1[(x-50)]*ch1v/10), (((x+1-50)*ts)+50), 350 - (CH1[(x-50+1)]*ch1v/10));
-       // strokeWeight(1);
+      line ((((x-50)*ts)+50), 350 - CH1[x-50]*ch1v/2, (((x+1-50)*ts)+50), 350 - CH1[(x-50+1)]*ch1v/2);
      }
   }
 }
